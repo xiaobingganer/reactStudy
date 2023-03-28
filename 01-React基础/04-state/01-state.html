@@ -25,14 +25,23 @@
 
     // 1.定义组件
     class Pig extends React.Component {
+
+      /* 
+      构造函数只适用于两种情况：1.this.state赋值对象初始化state
+                               2.为事件处理函数绑定实例  。。。.bind(this)
+                    可省略就省略
+      */
       constructor(props) {
         console.log(props)
-        super(props)
+        super(props)       //构造器是否接受props，是否传递给super，取决于:是否希望在构造器中通过this访问到props
         // 初始化状态
         this.state = {
-          isPig: true
+          isPig: true,
+          age:18
         }
-        this.handlerClick = this.handlerClick.bind(this)
+        this.handlerClick = this.handlerClick.bind(this)   //bind返回一个新函数，并且改变this指向，此句话的含义是，
+                                                          // 将类中的handlerClick函数放到实例对象身上去，render中掉的就是实例上的
+                                                          //不能用call或者apply，因为这俩会直接调用函数
       }
 
       // 自定义一个响应点击的函数
@@ -40,15 +49,15 @@
         let isPig = !this.state.isPig
         // 如下代码属于直接更新状态，不会被react所认可，不会被react“监听”到
         // this.state.isPig = isPig //不可以直接修改状态数据
-        // 要更新状态，必须使用this.setState()
+        // 要更新状态，必须使用this.setState()，进行的是合并操作:此处只修改了isPig，将修改的isPig和未修改的age合并了
         this.setState({ isPig })
       }
 
       // 重写父类的render
       render() {
         let { isPig } = this.state
-        // 如下代码，在指定点击事件的时候，不要加()
-        return <h2 onClick={this.handlerClick}>{isPig ? '佩奇是一头可爱的猪' : '佩奇不是猪'}</h2>
+        // 如下代码，在指定点击事件的时候，不要加(),此处的this.handlerClick调用的是实例对象上的handlerClick，而不是类中的handlerClick
+        return <h2 onClick={this.handlerClick}>{isPig ? '佩奇是一头可爱的猪' : '佩奇不是猪'},{this.state.age}岁</h2>
       }
 
     }

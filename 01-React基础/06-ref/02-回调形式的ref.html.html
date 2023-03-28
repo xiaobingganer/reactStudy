@@ -9,6 +9,7 @@
 <body>
   <br>
   <div id="example"></div>
+  <div id="example1"></div>
 
   <script type="text/javascript" src="../js/react.development.js"></script>
   <script type="text/javascript" src="../js/react-dom.development.js"></script>
@@ -24,7 +25,7 @@
     class MyComponent extends React.Component {
       clickHandle = () => {
         console.log(this)
-        // this.refs用于收集所有用ref声明的内容
+        // this.refs用于收集所有用ref声明的内容,input已经成了实例的属性
         alert(this.input.value)
       }
 
@@ -35,7 +36,10 @@
       render() {
         return (
           <div>
-            {/* this.input = input：在组件的实例对象中创建一个属性为input，并将输入的input作为值传给input属性 */}
+            {/* this.input = input：在组件的实例对象中创建一个属性为input，
+            并将输入的input作为值传给input属性,一句话，把真实dom节点存到了实例属性上
+            jsx里边的注释 
+          */}
             <input type="text" placeholder="点击按钮时提示" ref={(input) => { console.log('输入的input是', input); this.input = input }} />&nbsp;
             <button onClick={this.clickHandle}>按钮</button>&nbsp;
             <input type="text" placeholder="失去焦点时提示" onBlur={this.blurHandle} ref={(input) => { this.input = input }} />
@@ -44,7 +48,27 @@
       }
     }
 
+    class MyInput extends React.Component {
+      Click=()=>{
+        alert(this.input1.value)
+      }
+
+      Blur=()=>{
+        alert(this.input2.value)
+      }
+
+      render(){
+        return(
+          <div>
+            <input type="text"placeholder="输入" ref={(node)=>{this.input1=node}}/>
+            <button onClick={this.Click}>点击</button>
+            <input type="text" placeholder="输入" ref={node=>this.input2=node} onBlur={this.Blur}/>
+            </div>
+        )
+      }
+    }
     ReactDOM.render(<MyComponent />, document.getElementById('example'))
+    ReactDOM.render(<MyInput />, document.getElementById('example1'))
   </script>
 </body>
 

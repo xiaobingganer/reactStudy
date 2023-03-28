@@ -9,6 +9,7 @@
 <body>
   <div id="example1"></div>
   <div id="example2"></div>
+  <div id="example3"></div>
 
   <script type="text/javascript" src="../js/react.development.js"></script>
   <script type="text/javascript" src="../js/react-dom.development.js"></script>
@@ -30,11 +31,12 @@
        * 注：
        * 类里面的方法一旦加上static关键字，该方法只能有类本身调用，类的实例对象不能使用
        */
-      // 限制接收参数的类型以及必要性
+      // 限制接收参数的类型以及必要性,注意外边的p小写，里边的P大写
       static propTypes = {
         name: PropTypes.string.isRequired,
         sex: PropTypes.string.isRequired,
-        age: PropTypes.number
+        age: PropTypes.number,
+        // speak:PropTypes.func   限制函数
       }
 
       // 设置参数的默认值
@@ -80,11 +82,42 @@
       sex: '女',
     }
 
+
+
+   class Dog extends React.Component {
+     static propTypes={
+      name:PropTypes.string.isRequired,
+      age:PropTypes.number.isRequired,
+      sex:PropTypes.string
+     }
+
+     static defaultProps={
+      sex:'男'
+     }
+     state={age:this.props.age}
+    
+     add=()=>{
+      let age=this.state.age
+      console.log('1', this.state.age);
+      this.setState({ age: this.state.age + 1})
+     }
+     render(){
+      return(
+     <div>
+      <p>{this.props.name}{this.props.age}岁了,{this.props.sex}的,{this.state.age}</p>
+      <button onClick={this.add}>++</button>
+      </div>
+      )
+     }
+   }
+
+
     ReactDOM.render(
       <Person name={p1.name} sex={p1.sex} />,
       document.getElementById('example1')
     )
-    ReactDOM.render(<Person {...p2} />, document.getElementById('example2'))
+    ReactDOM.render(<Person {...p2}/>, document.getElementById('example2'))    //react的{...p2} 和原生的 {...p2}不一样的，仅适用于标签属性的传递，别的地方不允许...p2
+    ReactDOM.render(<Dog {...p2}/>, document.getElementById('example3'))    //react的{...p2} 和原生的 {...p2}不一样的，仅适用于标签属性的传递，别的地方不允许...p2
   </script>
 </body>
 

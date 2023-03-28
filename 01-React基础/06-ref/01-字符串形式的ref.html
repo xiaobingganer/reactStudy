@@ -9,6 +9,7 @@
 <body>
   <br>
   <div id="example"></div>
+  <div id="example1"></div>
 
   <script type="text/javascript" src="../js/react.development.js"></script>
   <script type="text/javascript" src="../js/react-dom.development.js"></script>
@@ -46,7 +47,30 @@
       }
     }
 
+
+
+    class MyInput extends React.Component {
+      Click=()=>{
+        alert(this.refs.input1.value)
+      }
+
+      Blur=()=>{
+        alert(this.refs.input2.value)
+      }
+
+      render(){
+        return(
+          <div>
+            <input type="text"placeholder="输入" ref="input1"/>
+            <button onClick={this.Click}>点击</button>
+            <input type="text" placeholder="输入" ref="input2" onBlur={this.Blur}/>
+            </div>
+        )
+      }
+    }
+
     ReactDOM.render(<MyComponent />, document.getElementById('example'))
+    ReactDOM.render(<MyInput />, document.getElementById('example1'))
   </script>
 </body>
 
