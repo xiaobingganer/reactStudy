@@ -18,6 +18,28 @@
      * 1. componentWillMount
      * 2. componentWillReceiveProps
      * 3. componentWillUpdate
+     * 
+     *      * 1.初始化
+     * 触发条件：ReactDOM.render(<MyComponent/>)
+     * constructor()
+     * getDerivedStateFromProps
+     * render():提供虚拟DOM，可能会调用多次
+     * componentDidMount()：启动定时器、发送Ajax请求、只执行一次
+     * 
+     * 2.更新
+     * 触发条件：this.setState({})或者父组件render触发
+     * getDerivedStateFromProps()
+     * shouldComponentUpdate()
+     * render()
+     * getSnapshotBeforeUpdate
+     * componentDidUpdate()
+     * 
+     * 3.卸载
+     * 触发条件：ReactDOM.unmountComponentAtNode()
+     * componentWillUnmount()：收尾工作，例如：清除定时器，只执行一次(若不清除定时器则会报错：不能在组件被卸载后更新组件)
+     * 
+     * 在这几个生命周期内this都为组件的实例对象
+     * 
      */
 
     class Life extends React.Component {
@@ -32,10 +54,12 @@
        * getDerivedStateFromProps用于取代componentWillMount、componentWillUpdate
        * 接收两个参数，都是对象，分别是组件传过来的值props和state中的值
        * 必须有返回值
+       * 用法很罕见
        */
       static getDerivedStateFromProps(props, state) {
         console.log('--getDerivedStateFromProps--')
-        return null
+        // return null
+        return props      //状态值任何时候都取决于传进来的props，更新也没用
       }
 
       // 组件挂载完成
@@ -54,21 +78,22 @@
       // getSnapshotBeforeUpdate
       /**
        * getSnapshotBeforeUpdate位于render和componentDidUpdate之间
-       * 接收两个参数，都是对象，分别是组件传过来的值props和state中的值
-       * 必须与componentDidUpdate配合使用
+       * 接收两个参数，都是对象，分别是组件传过来的值props和state中的值(都是上一次的,落后一拍)
+       * 必须与componentDidUpdate配合使用,用于获取更新前的值
        * 必须有返回值
        */
-      getSnapshotBeforeUpdate(props, state) {
-        console.log('--getSnapshotBeforeUpdate--')
+      getSnapshotBeforeUpdate(Props,State,value) {
+        // console.log('--getSnapshotBeforeUpdate--')
         return null
+        // return value     //传递给componentDidUpdate
       }
 
       // 更新完毕组件
       /**
        * 接收三个参数，分别是props、state和getSnapshotBeforeUpdate中传过来的值
        */
-      componentDidUpdate(props, state, data) {
-        console.log('--componentDidUpdate--')
+      componentDidUpdate(preProps, preState, value) {
+        // console.log('--componentDidUpdate--')
       }
 
       death = () => {

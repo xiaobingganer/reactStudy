@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>受控组件 & 非受控组件</title>
+  </head>
+
+  <body>
+    <div id="example"></div>
+    <div id="example1"></div>
+    <div id="example2"></div>
+
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script
+      type="text/javascript"
+      src="../js/react-dom.development.js"
+    ></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <script type="text/babel">
+      /**
+       * 需求: 自定义包含表单的组件
+       * 1. 界面如下所示
+       * 2. 输入用户名密码后, 点击登陆提示输入信息
+       * 3. 不提交表单
+       */
+
+      /**
+       * 高阶函数：满足任何一个就是
+       * 1.若a函数，接收的参数是一个函数，a就是
+       * 2.若a函数，调用的返回值是一个函数，a就是
+       * 常见的高阶函数:Promise/setTimeout/arr.map()等
+       * 
+       * 
+       * 
+       * 函数的柯里化：通过函数调用继续返回函数的方式，实现多次接收参数最后统一处理的函数编码形式
+       *
+function sum(a){
+  return (b)=>{
+    return (c)=>{ 
+      return a+b+c}
+    }
+  }
+sum(1)(1)(2)
+       */
+
+      class Control extends React.Component {
+        state = {
+          name: "",
+          password: "",
+        };
+
+        login = (e) => {
+          e.preventDefault();
+          alert(`名${this.state.name} 密码${this.state.password}`);
+        };
+
+        /*   
+      可以通过高阶函数，来调用一个函数，而不是，有几个输入框，就写几个方法
+        name = (e) => {
+          
+          this.setState({name:e.target.value})
+        };
+        password = (e) => {
+          let password=e.target.value
+          this.setState({password})
+        }; */
+
+        formData = (dataType) => {
+          return (event) => {
+            this.setState({ [dataType]: event.target.value }); // a='name'     {[a]:'姓名'}
+          };
+        };
+
+        render() {
+          return (
+            <form action="#" onSubmit={this.login}>
+              用户
+              <input
+                type="text"
+                name="name"
+                onChange={this.formData("name")}
+                maxlength="5"
+                placeholder="输入"
+              />{" "}
+              {/*formData返回的函数，会作为onChange的回调 */}
+              密码
+              <input
+                type="password"
+                name="password"
+                onChange={this.formData("password")}
+              />
+              <button>登录</button>
+            </form>
+          );
+        }
+      }
+
+      ReactDOM.render(<Control />, document.getElementById("example1"));
+    </script>
+  </body>
+</html>

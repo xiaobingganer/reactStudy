@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>声明周期 (旧)</title>
+</head>
+
+<body>
+  <div id="example"></div>
+
+  <script type="text/javascript" src="../js/react.development.js"></script>
+  <script type="text/javascript" src="../js/react-dom.development.js"></script>
+  <script type="text/javascript" src="../js/babel.min.js"></script>
+
+  <script type="text/babel">
+    /**
+     * 需求: 自定义组件
+     * 1. 让指定的文本做显示/隐藏的动画
+     * 2. 切换时间为2S
+     * 3. 点击按钮从界面中移除组件界面（当前组件在页面上消失）
+     */
+
+    /**
+     * 1.初始化
+     * 触发条件：ReactDOM.render(<MyComponent/>)
+     * constructor()
+     * componentWillMount()
+     * render():提供虚拟DOM，可能会调用多次
+     * componentDidMount()：启动定时器、发送Ajax请求、只执行一次
+     * 
+     * 2.更新
+     * 触发条件：this.setState({})
+     * componentWillUpdate()
+     * render()
+     * componentDidUpdate()
+     * 
+     * 3.卸载
+     * 触发条件：ReactDOM.unmountComponentAtNode()
+     * componentWillUnmount()：收尾工作，例如：清除定时器，只执行一次(若不清除定时器则会报错：不能在组件被卸载后更新组件)
+     * 
+     * 在这几个生命周期内this都为组件的实例对象
+     */
+
+    class Count extends React.Component{
+      
+      constructor(props){
+        console.log('constructor');
+        super(props);
+        this.state = {count:0}
+      }
+      // 即将挂载
+      componentWillMount(){
+        console.log('componentWillMount');
+      }
+    //  挂载完
+      componentDidMount(){
+        console.log('componentDidMount');
+      }       
+       add=()=>{
+        let {count} =this.state
+        this.setState({count:count+1})
+       }
+       
+       //组件是否要更新(更新的阀门),不写的话，默认会返回true
+      shouldComponentUpdate(){
+        console.log('shouldComponentUpdate');
+        return true
+      }
+   //即将更新
+      componentWillUpdate(){
+        console.log('componentWillUpdate');
+      }
+// 更新完
+      componentDidUpdate(){
+        console.log('componentDidUpdate');
+      }
+       death=()=>{
+        ReactDOM.unmountComponentAtNode(document.getElementById('example'))
+       }
+      
+       //卸载
+       
+       componentWillUnmount(){
+console.log('componentWillUnmount');
+       }
+
+       force=()=>{
+        this.forceUpdate()
+       }
+
+
+       render(){
+        console.log('render');
+        return(
+          <div>
+            <p>和为{this.state.count}</p>
+            <button onClick={this.add}>+1</button>
+            <button onClick={this.death}  style={{color:'red'}}>卸载</button>
+            <button onClick={this.force}  style={{color:'red'}}>不改state，强制更新</button>
+            </div>
+        )
+       }
+    }
+
+    ReactDOM.render(<Count />, document.getElementById('example'))
+  </script>
+</body>
+
+</html>

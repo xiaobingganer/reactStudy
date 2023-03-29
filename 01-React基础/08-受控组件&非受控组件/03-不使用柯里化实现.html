@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>受控组件 & 非受控组件</title>
+  </head>
+
+  <body>
+    <div id="example"></div>
+    <div id="example1"></div>
+    <div id="example2"></div>
+
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script
+      type="text/javascript"
+      src="../js/react-dom.development.js"
+    ></script>
+    <script type="text/javascript" src="../js/babel.min.js"></script>
+    <script type="text/babel">
+      /**
+       * 需求: 自定义包含表单的组件
+       * 1. 界面如下所示
+       * 2. 输入用户名密码后, 点击登陆提示输入信息
+       * 3. 不提交表单
+       */
+
+
+
+      class Control extends React.Component {
+        state = {
+          name: "",
+          password: "",
+        };
+
+        login = (e) => {
+          e.preventDefault();
+          alert(`名${this.state.name} 密码${this.state.password}`);
+        };
+
+
+        formData = (dataType,event) => {
+          
+            this.setState({ [dataType]: event.target.value }); // a='name'     {[a]:'姓名'}
+      
+        };
+
+        render() {
+          return (
+            <form action="#" onSubmit={this.login}>
+              用户
+              <input
+                type="text"
+                name="name"
+                onChange={event=> this.formData("name",event)}
+                maxlength="5"
+                placeholder="输入"
+              />
+          {/*onChange回调触发formData函数*/}
+              密码
+              <input
+                type="password"
+                name="password"
+                onChange={event=> this.formData("password",event)}
+              />
+              <button>登录</button>
+            </form>
+          );
+        }
+      }
+
+      ReactDOM.render(<Control />, document.getElementById("example1"));
+    </script>
+  </body>
+</html>
